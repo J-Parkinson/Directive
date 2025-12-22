@@ -8,8 +8,7 @@ class FlipTile(Tile):
     def __init__(self, wrapped_tile: Tile):
         # We pass the wrapped tile's current properties to the base Tile
         super().__init__(
-            wrapped_tile.coords[0],
-            wrapped_tile.coords[1],
+            wrapped_tile.coords,
             wrapped_tile.orientation,
             wrapped_tile.ownership
         )

@@ -1,17 +1,20 @@
+from typing import Optional
+
 from Tiles.tile import Tile, AsymmetricTile
+from board import Coord
 from direction import Direction, Orientation
 
 
 class StartTile(Tile):
-    def __init__(self, x: int, y: int, orientation: Orientation):
-        super().__init__(x, y, orientation)
+    def __init__(self, coord: Optional[Coord], orientation: Orientation):
+        super().__init__(coord, orientation)
         self._base_paths = {Direction.Up: [Direction.Up]}
         # No choice possible, no defaults needed.
 
 
 class ReverseTile(Tile):
-    def __init__(self, x: int, y: int, orientation: Orientation):
-        super().__init__(x, y, orientation)
+    def __init__(self, coord: Optional[Coord], orientation: Orientation):
+        super().__init__(coord, orientation)
         # Assuming Reverse bounces from all sides back to themselves
         self._base_paths = {
             Direction.Up: [Direction.Up],
@@ -23,8 +26,8 @@ class ReverseTile(Tile):
 
 
 class MergeTile(Tile):
-    def __init__(self, x: int, y: int, orientation: Orientation, default_choice: Direction):
-        super().__init__(x, y, orientation)
+    def __init__(self, coord: Optional[Coord], orientation: Orientation, default_choice: Direction):
+        super().__init__(coord, orientation)
         self._base_paths = {
             Direction.Left: [Direction.Up],
             Direction.Right: [Direction.Up],
@@ -35,8 +38,8 @@ class MergeTile(Tile):
 
 
 class QuadMergeTile(Tile):
-    def __init__(self, x: int, y: int, orientation: Orientation, default_choice: Direction):
-        super().__init__(x, y, orientation)
+    def __init__(self, coord: Optional[Coord], orientation: Orientation, default_choice: Direction):
+        super().__init__(coord, orientation)
         self._base_paths = {
             Direction.Left: [Direction.Up],
             Direction.Right: [Direction.Up],
@@ -48,8 +51,8 @@ class QuadMergeTile(Tile):
 
 
 class ForkTile(AsymmetricTile):
-    def __init__(self, x: int, y: int, orientation: Orientation, default_choice: Direction):
-        super().__init__(x, y, orientation)
+    def __init__(self, coord: Optional[Coord], orientation: Orientation, default_choice: Direction):
+        super().__init__(coord, orientation)
         self._base_paths = {
             Direction.Down: [Direction.Up, Direction.Right],
             Direction.Up: [Direction.Down],
@@ -60,8 +63,8 @@ class ForkTile(AsymmetricTile):
 
 
 class TurnTile(AsymmetricTile):
-    def __init__(self, x: int, y: int, orientation: Orientation):
-        super().__init__(x, y, orientation)
+    def __init__(self, coord: Optional[Coord], orientation: Orientation):
+        super().__init__(coord, orientation)
         self._base_paths = {
             Direction.Down: [Direction.Right],
             Direction.Right: [Direction.Down]
@@ -70,8 +73,8 @@ class TurnTile(AsymmetricTile):
 
 
 class CrossroadsTile(Tile):
-    def __init__(self, x: int, y: int, orientation: Orientation):
-        super().__init__(x, y, orientation)
+    def __init__(self, coord: Optional[Coord], orientation: Orientation):
+        super().__init__(coord, orientation)
         self._base_paths = {
             Direction.Up: [Direction.Down],
             Direction.Down: [Direction.Up],
@@ -82,8 +85,8 @@ class CrossroadsTile(Tile):
 
 
 class DivergeTile(Tile):
-    def __init__(self, x: int, y: int, orientation: Orientation):
-        super().__init__(x, y, orientation)
+    def __init__(self, coord: Optional[Coord], orientation: Orientation):
+        super().__init__(coord, orientation)
         self._base_paths = {
             Direction.Down: [Direction.Right],
             Direction.Right: [Direction.Down],
@@ -94,8 +97,8 @@ class DivergeTile(Tile):
 
 
 class DivergeMergeTile(Tile):
-    def __init__(self, x: int, y: int, orientation: Orientation, default_side: Direction):
-        super().__init__(x, y, orientation)
+    def __init__(self, coord: Optional[Coord], orientation: Orientation, default_side: Direction):
+        super().__init__(coord, orientation)
         self._base_paths = {
             Direction.Up: [Direction.Left, Direction.Right],
             Direction.Right: [Direction.Down, Direction.Up],

@@ -1,10 +1,12 @@
 from typing import Dict, List, Optional
+
+from board import Coord
 from direction import Direction, Orientation
 from player import Player
 
 class Tile:
-    def __init__(self, x: int, y: int, orientation: Orientation, ownership: Player = None):
-        self.coords = (x, y)
+    def __init__(self, coord: Optional[Coord], orientation: Orientation, ownership: Player = None):
+        self.coords = coord
         self.orientation = orientation
         self.ownership = ownership
 

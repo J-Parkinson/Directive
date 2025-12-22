@@ -25,7 +25,7 @@ def generate_tile_pile() -> TilePile:
         Creates a concrete tile instance.
         If it's an AsymmetricTile, alternates wrapping it in a FlipTile.
         """
-        t = cls(0, 0, Orientation.North, **kwargs)
+        t = cls(None, Orientation.North, **kwargs)
 
         # Check if this specific tile class inherits from AsymmetricTile
         if isinstance(t, AsymmetricTile) and len(items) % 2 == 1:
@@ -33,9 +33,8 @@ def generate_tile_pile() -> TilePile:
         else:
             items.append(t)
 
-    # 1. Reverse (10) - Symmetrical (Not in add_tile to avoid unnecessary checks)
-    for _ in range(10):
-        items.append(ReverseTile(0, 0, Orientation.North))
+    # 1. Reverse (10) - Symmetrical
+    for _ in range(10): add_tile(ReverseTile)
 
     # 2. Merge (20) - Asymmetric (Choice: Left vs Right)
     for _ in range(10): add_tile(MergeTile, default_choice=Direction.Left)
@@ -43,8 +42,7 @@ def generate_tile_pile() -> TilePile:
 
     # 3. QuadMerge (20) - Asymmetric
     quad_choices = [Direction.Left, Direction.Right, Direction.Down]
-    for i in range(20):
-        add_tile(QuadMergeTile, default_choice=quad_choices[i % 3])
+    for i in range(20): add_tile(QuadMergeTile, default_choice=quad_choices[i % 3])
 
     # 4. Fork (20) - Asymmetric (Physical 'r' vs 'l')
     for _ in range(10): add_tile(ForkTile, default_choice=Direction.Up)
@@ -54,8 +52,7 @@ def generate_tile_pile() -> TilePile:
     for _ in range(8): add_tile(TurnTile)
 
     # 6. Crossroads (4) - Symmetrical
-    for _ in range(4):
-        items.append(CrossroadsTile(0, 0, Orientation.North))
+    for _ in range(4): add_tile(CrossroadsTile)
 
     # 7. Diverge (8) - Asymmetric
     for _ in range(8): add_tile(DivergeTile)

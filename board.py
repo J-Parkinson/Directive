@@ -1,6 +1,11 @@
 from typing import List, Tuple, Dict
 from robot import Robot
 from Tiles.tile import Tile
+from Tiles.tiles import StartTile
+from direction import Orientation
+
+# Type alias for cleaner signatures
+Coord = Tuple[int, int]
 
 class GameBoard:
     def __init__(self):
