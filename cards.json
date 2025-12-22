@@ -1,0 +1,2440 @@
+[{
+        "color": "Blue",
+        "hexCode": "#00A3FF",
+        "delete": {
+            "text": "DATA RECOVERY: Take top card from Discard. Shuffle Discard to bottom.",
+            "action": {
+                "type": "DECK_OP",
+                "params": {
+                    "op": "recycle",
+                    "source": "discard",
+                    "target": "hand",
+                    "count": 1
+                },
+                "function": "lambda g: g.move_card(source='discard', target='hand', count=1).shuffle_bottom('discard')"
+            }
+        },
+        "cards": [{
+                "id": "BLU-001",
+                "title": "VECTOR_SHIFT",
+                "seed": 1101,
+                "execute": {
+                    "text": "NEURAL EXPANSION: Draw 3 Tiles. Place 1 Neutral Tile. Discard 2.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "draw": 3,
+                            "place": "neutral",
+                            "discard": 2
+                        },
+                        "function": "lambda g: g.draw_tiles(3).place_tile('neutral').discard_tiles(2)"
+                    }
+                },
+                "write": {
+                    "text": "TECTONIC.EXE: Shift current ROW or COLUMN one space.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "shift",
+                            "magnitude": 1
+                        },
+                        "function": "lambda g: g.shift_board(magnitude=1)"
+                    }
+                }
+            }, {
+                "id": "BLU-002",
+                "title": "ROTATE_SECTOR",
+                "seed": 1102,
+                "execute": {
+                    "text": "FORCE REBOOT: Rotate any 1 Tile on the board 90 degrees.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "rotate",
+                            "degrees": 90,
+                            "target": "any"
+                        },
+                        "function": "lambda g: g.rotate_tile(target='any', deg=90)"
+                    }
+                },
+                "write": {
+                    "text": "PIVOT.LOG: Rotate THIS tile 90 degrees before Robot exits.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "rotate",
+                            "degrees": 90,
+                            "target": "self",
+                            "trigger": "exit"
+                        },
+                        "function": "lambda g: g.rotate_tile(target='self', deg=90)"
+                    }
+                }
+            }, {
+                "id": "BLU-003",
+                "title": "TRACE_ROUTE",
+                "seed": 1103,
+                "execute": {
+                    "text": "HOT SWAP: Swap 2 unowned tiles on the board.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "swap",
+                            "count": 2,
+                            "restriction": "unowned"
+                        },
+                        "function": "lambda g: g.swap_tiles(count=2, filter='unowned')"
+                    }
+                },
+                "write": {
+                    "text": "BRIDGE.EXE: Create a Neutral Tile on an adjacent empty space.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "place",
+                            "type": "neutral",
+                            "loc": "adjacent_empty"
+                        },
+                        "function": "lambda g: g.place_tile(type='neutral', loc='adj_empty')"
+                    }
+                }
+            }, {
+                "id": "BLU-004",
+                "title": "GHOST_DRIVE",
+                "seed": 1104,
+                "execute": {
+                    "text": "TELEPORT: Move Robot to any Neutral Tile.",
+                    "action": {
+                        "type": "MOVE",
+                        "params": {
+                            "target": "neutral"
+                        },
+                        "function": "lambda g: g.move_robot(target='any_neutral')"
+                    }
+                },
+                "write": {
+                    "text": "JUMP_GATE: Move Robot to any other Tile you own.",
+                    "action": {
+                        "type": "MOVE",
+                        "params": {
+                            "target": "owned"
+                        },
+                        "function": "lambda g: g.move_robot(target='any_owned')"
+                    }
+                }
+            }, {
+                "id": "BLU-005",
+                "title": "PATH_FINDER",
+                "seed": 1105,
+                "execute": {
+                    "text": "MAP_SURVEY: Draw 2 Tiles. Add 1 to hand, 1 to bottom of deck.",
+                    "action": {
+                        "type": "DECK_OP",
+                        "params": {
+                            "op": "draw",
+                            "target": "hand",
+                            "count": 1
+                        },
+                        "function": "lambda g: g.draw_tiles(2).keep_to_hand(1).send_to_bottom(1)"
+                    }
+                },
+                "write": {
+                    "text": "AUTOPATH: If the next tile is empty, place a Neutral Tile there.",
+                    "action": {
+                        "type": "LOGIC",
+                        "params": {
+                            "cond": "next_empty"
+                        },
+                        "function": "lambda g: g.place_tile('neutral') if g.is_next_empty() else g"
+                    }
+                }
+            }, {
+                "id": "BLU-006",
+                "title": "SECTOR_LOCK",
+                "seed": 1106,
+                "execute": {
+                    "text": "REWRITE: Change the exit direction of one tile for this turn.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "modify_exit"
+                        },
+                        "function": "lambda g: g.modify_exit(target='any', duration='turn')"
+                    }
+                },
+                "write": {
+                    "text": "ENCRYPT: This tile cannot be Moved or Rotated by opponents.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock",
+                            "target": "self"
+                        },
+                        "function": "lambda g: g.apply_status(target='self', status='locked')"
+                    }
+                }
+            }, {
+                "id": "BLU-007",
+                "title": "DEFRAG",
+                "seed": 1107,
+                "execute": {
+                    "text": "ORGANIZE: Rearrange your entire Program Stack.",
+                    "action": {
+                        "type": "DECK_OP",
+                        "params": {
+                            "op": "reorder",
+                            "target": "stack"
+                        },
+                        "function": "lambda g: g.reorder_stack()"
+                    }
+                },
+                "write": {
+                    "text": "SLIDE.SYS: Shift the Robot one tile Left or Right (if possible).",
+                    "action": {
+                        "type": "MOVE",
+                        "params": {
+                            "dir": "lateral"
+                        },
+                        "function": "lambda g: g.move_robot_lateral()"
+                    }
+                }
+            }, {
+                "id": "BLU-008",
+                "title": "UPLINK",
+                "seed": 1108,
+                "execute": {
+                    "text": "SIGNAL_BOOST: All players draw 2 cards.",
+                    "action": {
+                        "type": "DECK_OP",
+                        "params": {
+                            "op": "draw",
+                            "target": "all",
+                            "count": 2
+                        },
+                        "function": "lambda g: g.all_players_draw(2)"
+                    }
+                },
+                "write": {
+                    "text": "REMOTE_ACCESS: Trigger the Write effect of an adjacent tile.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "trigger_adj"
+                        },
+                        "function": "lambda g: g.trigger_adjacent_write()"
+                    }
+                }
+            }, {
+                "id": "BLU-009",
+                "title": "OVERLAY_MODULE",
+                "seed": 1109,
+                "execute": {
+                    "text": "HOT PATCH: Place a new Tile directly on top of any Neutral Tile.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "overlay"
+                        },
+                        "function": "lambda g: g.overlay_tile(target='neutral')"
+                    }
+                },
+                "write": {
+                    "text": "RE-SKIN: Change this tile's ownership to Neutral after the Robot leaves.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "change_owner"
+                        },
+                        "function": "lambda g: g.queue_event('exit', lambda game: game.set_owner(target='self', owner='neutral'))"
+                    }
+                }
+            }, {
+                "id": "BLU-010",
+                "title": "MIRROR_LINK",
+                "seed": 1110,
+                "execute": {
+                    "text": "REFLECT: Flip any Tile 180 degrees. Robot maintains current vector.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "rotate",
+                            "val": 180
+                        },
+                        "function": "lambda g: g.rotate_tile(target='any', deg=180)"
+                    }
+                },
+                "write": {
+                    "text": "REVERSE_POLARITY: Robot exits this tile through the same side it entered.",
+                    "action": {
+                        "type": "MOVE",
+                        "params": {
+                            "op": "reverse"
+                        },
+                        "function": "lambda g: g.reverse_robot_vector()"
+                    }
+                }
+            }, {
+                "id": "BLU-011",
+                "title": "BUS_EXTENSION",
+                "seed": 1111,
+                "execute": {
+                    "text": "EXPAND: Add 2 Neutral Tiles to the board from the supply.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "add_neutral",
+                            "count": 2
+                        },
+                        "function": "lambda g: g.add_to_board('neutral', 2)"
+                    }
+                },
+                "write": {
+                    "text": "LONG_PATH: Robot must move 1 extra space while on this tile.",
+                    "action": {
+                        "type": "MOVE",
+                        "params": {
+                            "bonus": 1
+                        },
+                        "function": "lambda g: g.modify_current_move(1)"
+                    }
+                }
+            }, {
+                "id": "BLU-012",
+                "title": "BRIDGE_PROTOCOL",
+                "seed": 1112,
+                "execute": {
+                    "text": "SIGNAL_JUMP: Connect two tiles that are not touching for 1 move.",
+                    "action": {
+                        "type": "MOVE",
+                        "params": {
+                            "op": "bridge"
+                        },
+                        "function": "lambda g: g.create_temp_bridge()"
+                    }
+                },
+                "write": {
+                    "text": "TUNNEL: Robot moves to the nearest owned tile in a straight line.",
+                    "action": {
+                        "type": "MOVE",
+                        "params": {
+                            "target": "nearest_owned"
+                        },
+                        "function": "lambda g: g.move_robot_linear(target='owned')"
+                    }
+                }
+            }, {
+                "id": "BLU-013",
+                "title": "PARALLEL_PORT",
+                "seed": 1113,
+                "execute": {
+                    "text": "DUPLICATE: Copy the layout of an adjacent tile onto a Neutral Tile.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "copy"
+                        },
+                        "function": "lambda g: g.copy_tile_layout(source='adj', target='neutral')"
+                    }
+                },
+                "write": {
+                    "text": "SYNC: Trigger the Write effect of every tile you own in this Row.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "trigger_row"
+                        },
+                        "function": "lambda g: g.trigger_owned_in_row()"
+                    }
+                }
+            }, {
+                "id": "BLU-014",
+                "title": "STORAGE_DRIVE",
+                "seed": 1114,
+                "execute": {
+                    "text": "CACHE: Put 1 card from hand under your Player Board. Draw 2.",
+                    "action": {
+                        "type": "DECK_OP",
+                        "params": {
+                            "op": "stash"
+                        },
+                        "function": "lambda g: g.stash_card().draw(2)"
+                    }
+                },
+                "write": {
+                    "text": "RECALL: Add the card stored under your Board to your Hand.",
+                    "action": {
+                        "type": "DECK_OP",
+                        "params": {
+                            "op": "unstash"
+                        },
+                        "function": "lambda g: g.unstash_card()"
+                    }
+                }
+            }, {
+                "id": "BLU-015",
+                "title": "GEOMETRY_ENGINE",
+                "seed": 1115,
+                "execute": {
+                    "text": "WARP: Swap the positions of the Robot and any Neutral Tile.",
+                    "action": {
+                        "type": "MOVE",
+                        "params": {
+                            "op": "warp"
+                        },
+                        "function": "lambda g: g.warp_robot(target='neutral')"
+                    }
+                },
+                "write": {
+                    "text": "SLIDE_LOCK: This Row cannot be shifted while the Robot is on it.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock_row"
+                        },
+                        "function": "lambda g: g.lock_row_shift(duration='active')"
+                    }
+                }
+            }, {
+                "id": "BLU-016",
+                "title": "HARDWARE_ID",
+                "seed": 1116,
+                "execute": {
+                    "text": "SCAN: Look at an opponent's hand. You may move 1 card to their Stack.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "peek"
+                        },
+                        "function": "lambda g: g.peek_opponent_hand().move_to_opponent_stack(1)"
+                    }
+                },
+                "write": {
+                    "text": "VERIFY: If you own 3+ tiles in a line, gain +2 Battery Volts.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "battery",
+                            "val": 2
+                        },
+                        "function": "lambda g: g.add_battery(2) if g.check_line_owned(3) else g"
+                    }
+                }
+            }, {
+                "id": "BLU-017",
+                "title": "ISOLATE_NODE",
+                "seed": 7701,
+                "execute": {
+                    "text": "DISCONNECT: Move a Neutral tile to a space where it touches no other tiles.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "move_isolated"
+                        },
+                        "function": "lambda g: g.move_to_isolated('neutral')"
+                    }
+                },
+                "write": {
+                    "text": "AIR_GAP: Mechanically, this tile is considered adjacent to nothing.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "null_adjacency"
+                        },
+                        "function": "lambda g: g.set_adjacency('none')"
+                    }
+                }
+            }, {
+                "id": "BLU-018",
+                "title": "RECOMPILE_MAP",
+                "seed": 7702,
+                "execute": {
+                    "text": "SCRAMBLE: Gather all Neutral tiles on board and redistribute them randomly.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "redistribute"
+                        },
+                        "function": "lambda g: g.redistribute_tiles('neutral')"
+                    }
+                },
+                "write": {
+                    "text": "PHYSICAL_SWAP: Swap this tile's location with another owned tile's location.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "swap_self"
+                        },
+                        "function": "lambda g: g.swap_physical_position(target='owned')"
+                    }
+                }
+            }, {
+                "id": "BLU-019",
+                "title": "VIRTUAL_MACHINE",
+                "seed": 7703,
+                "execute": {
+                    "text": "EMULATE: Treat one tile as having a different path configuration for this turn.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "path_emulation"
+                        },
+                        "function": "lambda g: g.emulate_path(target='any', duration='turn')"
+                    }
+                },
+                "write": {
+                    "text": "MIRROR_MODE: The exits on this tile are reversed (Left becomes Right, etc).",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "invert_exits"
+                        },
+                        "function": "lambda g: g.invert_tile_exits()"
+                    }
+                }
+            }, {
+                "id": "BLU-020",
+                "title": "CACHE_PARTITION",
+                "seed": 7704,
+                "execute": {
+                    "text": "RESERVE: Place a 'Block' token on an empty space. No tiles can be placed there.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "place_block"
+                        },
+                        "function": "lambda g: g.place_token('block', loc='empty')"
+                    }
+                },
+                "write": {
+                    "text": "PRE_FETCH: Before robot leaves this tile, rotate an adjacent tile 90 degrees.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "rotate_adj"
+                        },
+                        "function": "lambda g: g.rotate_tile(target='adj', deg=90)"
+                    }
+                }
+            }, {
+                "id": "BLU-021",
+                "title": "LOAD_BALANCER",
+                "seed": 7705,
+                "execute": {
+                    "text": "DISTRIBUTE: Move Robot to the owned tile with the fewest neighbors.",
+                    "action": {
+                        "type": "MOVE",
+                        "params": {
+                            "target": "min_neighbors"
+                        },
+                        "function": "lambda g: g.move_robot(target='min_neighbor_owned')"
+                    }
+                },
+                "write": {
+                    "text": "GRAVITY_SHIFT: Shift this row towards the side of the board with fewer tiles.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "gravity_shift"
+                        },
+                        "function": "lambda g: g.shift_row_to_low_density()"
+                    }
+                }
+            }, {
+                "id": "BLU-022",
+                "title": "DATA_MIGRATION",
+                "seed": 7706,
+                "execute": {
+                    "text": "TRANSFER: Move 1 card from your Stack to an opponent's Stack (it retains your ownership).",
+                    "action": {
+                        "type": "DECK_OP",
+                        "params": {
+                            "op": "transfer"
+                        },
+                        "function": "lambda g: g.transfer_stack_card(target='opponent')"
+                    }
+                },
+                "write": {
+                    "text": "RELOCATE: Swap the physical position of this tile with any Neutral tile on the board.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "swap_neutral"
+                        },
+                        "function": "lambda g: g.swap_physical_position(target='any_neutral')"
+                    }
+                }
+            }, {
+                "id": "BLU-023",
+                "title": "LOAD_SEQUENCE",
+                "seed": 7707,
+                "execute": {
+                    "text": "BOOT_ORDER: Look at the top 5 cards of the deck. Place up to 2 in your Stack, rest on bottom.",
+                    "action": {
+                        "type": "DECK_OP",
+                        "params": {
+                            "op": "peek"
+                        },
+                        "function": "lambda g: g.peek_deck(5).to_stack(2).to_bottom(3)"
+                    }
+                },
+                "write": {
+                    "text": "QUEUE_SYNC: Trigger the 'Write' effect of the very first card in your Program Stack.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "trigger_index",
+                            "val": 0
+                        },
+                        "function": "lambda g: g.trigger_stack_at(0)"
+                    }
+                }
+            }, {
+                "id": "BLU-024",
+                "title": "OVERCLOCK_HARDWARE",
+                "seed": 7708,
+                "execute": {
+                    "text": "VOLTAGE_JUMP: Add +3 Volts to the Battery. Immediately end your turn.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "battery",
+                            "val": 3
+                        },
+                        "function": "lambda g: g.add_battery(3).end_turn()"
+                    }
+                },
+                "write": {
+                    "text": "TURBO_MODE: The Robot moves 2 tiles forward from here, ignoring the next tile's effects.",
+                    "action": {
+                        "type": "MOVE",
+                        "params": {
+                            "dist": 2,
+                            "ignore": true
+                        },
+                        "function": "lambda g: g.move_robot(distance=2, ignore_stack=True)"
+                    }
+                }
+            }
+        ]
+    }, {
+        "color": "Yellow",
+        "hexCode": "#FFD600",
+        "delete": {
+            "text": "LIVE LOAD: Write 1 card from hand into Stack at any position.",
+            "action": {
+                "type": "DECK_OP",
+                "params": {
+                    "op": "write",
+                    "source": "hand",
+                    "target": "stack"
+                },
+                "function": "lambda g: g.move_card(source='hand', target='stack', pos='any')"
+            }
+        },
+        "cards": [{
+                "id": "YEL-001",
+                "title": "RECURSION_LOOP",
+                "seed": 3301,
+                "execute": {
+                    "text": "INSTANT PATCH: Execute 1 card from hand as if in Stack.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "exec_hand"
+                        },
+                        "function": "lambda g: g.execute_hand_card()"
+                    }
+                },
+                "write": {
+                    "text": "REPEAT: If Battery > 8, Reset Program Counter to 0.",
+                    "action": {
+                        "type": "LOGIC",
+                        "params": {
+                            "cond": "battery",
+                            "val": 8,
+                            "op": ">"
+                        },
+                        "function": "lambda g: g.set_pc(0) if g.battery > 8 else g"
+                    }
+                }
+            }, {
+                "id": "YEL-002",
+                "title": "LOGIC_SHIELD",
+                "seed": 3302,
+                "execute": {
+                    "text": "NEGATE: Cancel an opponent's Execute action.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "negate",
+                            "target": "execute"
+                        },
+                        "function": "lambda g: g.negate_action('execute')"
+                    }
+                },
+                "write": {
+                    "text": "SKIP: If Battery < 5, Skip the next 2 cards in this Stack.",
+                    "action": {
+                        "type": "LOGIC",
+                        "params": {
+                            "cond": "battery",
+                            "val": 5,
+                            "op": "<"
+                        },
+                        "function": "lambda g: g.inc_pc(3) if g.battery < 5 else g"
+                    }
+                }
+            }, {
+                "id": "YEL-003",
+                "title": "IF_THEN",
+                "seed": 3303,
+                "execute": {
+                    "text": "DEBUG: View the top 3 cards of the deck. Reorder them.",
+                    "action": {
+                        "type": "DECK_OP",
+                        "params": {
+                            "op": "peek"
+                        },
+                        "function": "lambda g: g.peek_deck(3).reorder()"
+                    }
+                },
+                "write": {
+                    "text": "BRANCH: If Robot is on a corner tile, Execute next card twice.",
+                    "action": {
+                        "type": "LOGIC",
+                        "params": {
+                            "cond": "at_corner"
+                        },
+                        "function": "lambda g: g.queue_multiplier(target='next', val=2) if g.is_at_corner() else g"
+                    }
+                }
+            }, {
+                "id": "YEL-004",
+                "title": "WHILE_TRUE",
+                "seed": 3304,
+                "execute": {
+                    "text": "LOOP: Move the Robot 1 extra space this turn.",
+                    "action": {
+                        "type": "MOVE",
+                        "params": {
+                            "val": 1
+                        },
+                        "function": "lambda g: g.modify_movement(1)"
+                    }
+                },
+                "write": {
+                    "text": "HOLD: Robot stops here. It does not move next turn.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "stun"
+                        },
+                        "function": "lambda g: g.apply_status(target='robot', status='stunned', duration=1)"
+                    }
+                }
+            }, {
+                "id": "YEL-005",
+                "title": "REACTION_TIME",
+                "seed": 3305,
+                "execute": {
+                    "text": "QUICK_FIX: Swap this card with a card in your Stack.",
+                    "action": {
+                        "type": "DECK_OP",
+                        "params": {
+                            "op": "swap_self"
+                        },
+                        "function": "lambda g: g.swap_with_stack(target='self')"
+                    }
+                },
+                "write": {
+                    "text": "WAIT: If you have < 3 cards in hand, Draw 2 cards.",
+                    "action": {
+                        "type": "LOGIC",
+                        "params": {
+                            "cond": "hand_size",
+                            "val": 3,
+                            "op": "<"
+                        },
+                        "function": "lambda g: g.draw(2) if len(g.hand) < 3 else g"
+                    }
+                }
+            }, {
+                "id": "YEL-006",
+                "title": "TRY_CATCH",
+                "seed": 3306,
+                "execute": {
+                    "text": "RECOVER: If you Off-Track this turn, do not lose ownership.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "protect"
+                        },
+                        "function": "lambda g: g.protect_ownership(trigger='off_track')"
+                    }
+                },
+                "write": {
+                    "text": "FAIL_SAFE: If next tile is Red, Jump PC to end of stack.",
+                    "action": {
+                        "type": "LOGIC",
+                        "params": {
+                            "cond": "next_color",
+                            "val": "Red"
+                        },
+                        "function": "lambda g: g.set_pc('end') if g.next_tile_color == 'Red' else g"
+                    }
+                }
+            }, {
+                "id": "YEL-007",
+                "title": "GOTO",
+                "seed": 3307,
+                "execute": {
+                    "text": "RE-ROUTE: Move your Program Counter to any position.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "set_pc"
+                        },
+                        "function": "lambda g: g.set_pc(g.prompt_index())"
+                    }
+                },
+                "write": {
+                    "text": "JUMP: Move the Robot 2 tiles forward, skipping all effects.",
+                    "action": {
+                        "type": "MOVE",
+                        "params": {
+                            "dist": 2,
+                            "ignore": true
+                        },
+                        "function": "lambda g: g.move_robot(2, ignore_stack=True)"
+                    }
+                }
+            }, {
+                "id": "YEL-008",
+                "title": "GATE_KEEPER",
+                "seed": 3308,
+                "execute": {
+                    "text": "ACCESS: Draw 1 card. If it is Blue, draw another card.",
+                    "action": {
+                        "type": "DECK_OP",
+                        "params": {
+                            "op": "conditional_draw"
+                        },
+                        "function": "lambda g: g.draw(1).draw(1) if g.last_drawn.color == 'Blue' else g"
+                    }
+                },
+                "write": {
+                    "text": "IF_OWNED: If you own the next tile, execute this Stack twice.",
+                    "action": {
+                        "type": "LOGIC",
+                        "params": {
+                            "cond": "next_owned"
+                        },
+                        "function": "lambda g: g.queue_multiplier(target='stack', val=2) if g.is_next_owned() else g"
+                    }
+                }
+            }, {
+                "id": "YEL-009",
+                "title": "FOR_EACH",
+                "seed": 3309,
+                "execute": {
+                    "text": "ITERATE: Select 1 card in your Stack. Move it to the top.",
+                    "action": {
+                        "type": "DECK_OP",
+                        "params": {
+                            "op": "move_top"
+                        },
+                        "function": "lambda g: g.move_to_stack_top(g.prompt_stack_card())"
+                    }
+                },
+                "write": {
+                    "text": "LOOP_ALL: Gain 1 VP for every unique color in your Program Stack.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp"
+                        },
+                        "function": "lambda g: g.add_vp(g.count_unique_stack_colors())"
+                    }
+                }
+            }, {
+                "id": "YEL-010",
+                "title": "INTERRUPT_REQ",
+                "seed": 3310,
+                "execute": {
+                    "text": "BREAK: Stop an opponent's Move or Shift immediately.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "interrupt"
+                        },
+                        "function": "lambda g: g.cancel_current_action()"
+                    }
+                },
+                "write": {
+                    "text": "HALT: The Robot cannot be moved by Blue cards while on this tile.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock_robot"
+                        },
+                        "function": "lambda g: g.apply_immunity(target='robot', source='Blue')"
+                    }
+                }
+            }, {
+                "id": "YEL-011",
+                "title": "BOOLEAN_LOG",
+                "seed": 3311,
+                "execute": {
+                    "text": "TRUE_FALSE: Look at the top card of the deck. Discard or Keep it.",
+                    "action": {
+                        "type": "DECK_OP",
+                        "params": {
+                            "op": "peek"
+                        },
+                        "function": "lambda g: g.peek_deck(1).keep_or_discard()"
+                    }
+                },
+                "write": {
+                    "text": "NOT_OPERATOR: Treat the next Red card in this stack as a Green card.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "retype_next"
+                        },
+                        "function": "lambda g: g.modify_next_type(from_col='Red', to_col='Green')"
+                    }
+                }
+            }, {
+                "id": "YEL-012",
+                "title": "POINTER_ADDR",
+                "seed": 3312,
+                "execute": {
+                    "text": "REFERENCE: Name a card. If an opponent has it, they must Discard it.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "named_discard"
+                        },
+                        "function": "lambda g: g.target_opponent().discard_named(g.prompt_title())"
+                    }
+                },
+                "write": {
+                    "text": "REDIRECT: Move the Robot to the Start Tile. Do not reset Battery.",
+                    "action": {
+                        "type": "MOVE",
+                        "params": {
+                            "target": "start"
+                        },
+                        "function": "lambda g: g.move_robot('start')"
+                    }
+                }
+            }, {
+                "id": "YEL-013",
+                "title": "NULL_PTR",
+                "seed": 3313,
+                "execute": {
+                    "text": "VOID: Remove 1 card from your Stack. Add it to your hand.",
+                    "action": {
+                        "type": "DECK_OP",
+                        "params": {
+                            "op": "pull_back"
+                        },
+                        "function": "lambda g: g.move_card(source='stack', target='hand')"
+                    }
+                },
+                "write": {
+                    "text": "ERROR_HAND: If this is the only card in your Stack, gain 5 VP.",
+                    "action": {
+                        "type": "LOGIC",
+                        "params": {
+                            "cond": "stack_size",
+                            "val": 1
+                        },
+                        "function": "lambda g: g.add_vp(5) if g.stack_size == 1 else g"
+                    }
+                }
+            }, {
+                "id": "YEL-014",
+                "title": "STACK_TRACE",
+                "seed": 3314,
+                "execute": {
+                    "text": "INSPECT: View an opponent's entire Program Stack.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "peek_stack"
+                        },
+                        "function": "lambda g: g.peek_stack('opponent')"
+                    }
+                },
+                "write": {
+                    "text": "DEBUG_LOG: Replace the next card in this Stack with one from hand.",
+                    "action": {
+                        "type": "DECK_OP",
+                        "params": {
+                            "op": "hot_swap"
+                        },
+                        "function": "lambda g: g.replace_next_stack_card('hand')"
+                    }
+                }
+            }, {
+                "id": "YEL-015",
+                "title": "SWITCH_CASE",
+                "seed": 6601,
+                "execute": {
+                    "text": "REFRESH: Discard hand and draw the same number of cards.",
+                    "action": {
+                        "type": "DECK_OP",
+                        "params": {
+                            "op": "recycle_hand"
+                        },
+                        "function": "lambda g: g.draw(len(g.discard_hand()))"
+                    }
+                },
+                "write": {
+                    "text": "DIRECTIONAL_IF: IF entering from N|S execute NEXT. ELSE skip NEXT.",
+                    "action": {
+                        "type": "LOGIC",
+                        "params": {
+                            "cond": "vector"
+                        },
+                        "function": "lambda g: g.inc_pc(1) if g.entry_vector in ['N','S'] else g.inc_pc(2)"
+                    }
+                }
+            }, {
+                "id": "YEL-016",
+                "title": "EXCEPTION_HANDLER",
+                "seed": 6602,
+                "execute": {
+                    "text": "CATCH: Cancel a Red 'Execute' action targeting you.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "negate",
+                            "val": "Red"
+                        },
+                        "function": "lambda g: g.negate_action('Red')"
+                    }
+                },
+                "write": {
+                    "text": "ERROR_TO_VP: If Red card triggers in stack, gain +2 VP instead.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "trap"
+                        },
+                        "function": "lambda g: g.trap_color('Red', 'vp', 2)"
+                    }
+                }
+            }, {
+                "id": "YEL-017",
+                "title": "ASYNC_AWAIT",
+                "seed": 6603,
+                "execute": {
+                    "text": "QUEUE: Play card face-down. Reveal and execute at start of next turn.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "delay"
+                        },
+                        "function": "lambda g: g.queue_delayed_action(g.prompt_hand())"
+                    }
+                },
+                "write": {
+                    "text": "PAUSE: Robot stops here. Resume next turn with +2 move range.",
+                    "action": {
+                        "type": "MOVE",
+                        "params": {
+                            "stun": 1,
+                            "bonus": 2
+                        },
+                        "function": "lambda g: g.apply_status('robot', 'stunned').add_buff('next_move', 2)"
+                    }
+                }
+            }, {
+                "id": "YEL-018",
+                "title": "GOTO_LABEL",
+                "seed": 6604,
+                "execute": {
+                    "text": "SEARCH: Search deck for specific title, add to hand. Shuffle.",
+                    "action": {
+                        "type": "DECK_OP",
+                        "params": {
+                            "op": "search"
+                        },
+                        "function": "lambda g: g.search_deck(g.prompt_title()).shuffle()"
+                    }
+                },
+                "write": {
+                    "text": "JUMP_TO_COLOR: Move PC to the next Yellow card in this stack.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "pc_jump"
+                        },
+                        "function": "lambda g: g.set_pc(g.find_next_color('Yellow'))"
+                    }
+                }
+            }, {
+                "id": "YEL-019",
+                "title": "BREAKPOINT",
+                "seed": 6605,
+                "execute": {
+                    "text": "HALT_ROBOT: Stop the Robot's movement immediately.",
+                    "action": {
+                        "type": "MOVE",
+                        "params": {
+                            "op": "stop"
+                        },
+                        "function": "lambda g: g.stop_robot()"
+                    }
+                },
+                "write": {
+                    "text": "STOP_EXEC: Stop processing this Program Stack immediately.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "terminate"
+                        },
+                        "function": "lambda g: g.set_pc('end')"
+                    }
+                }
+            }, {
+                "id": "YEL-020",
+                "title": "CALLBACK_FUNC",
+                "seed": 6606,
+                "execute": {
+                    "text": "EXEC_DISCARD: Perform the 'Execute' effect of top discard card.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "exec_discard"
+                        },
+                        "function": "lambda g: g.execute_card(g.discard[0], 'execute')"
+                    }
+                },
+                "write": {
+                    "text": "POST_EXEC: After finishing stack, execute top discard card.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "callback"
+                        },
+                        "function": "lambda g: g.queue_callback(lambda game: game.execute_card(game.discard[0], 'execute'))"
+                    }
+                }
+            }, {
+                "id": "YEL-021",
+                "title": "REGEX_MATCH",
+                "seed": 6607,
+                "execute": {
+                    "text": "FILTER: Reveal top 5 deck cards. Keep all of one color.",
+                    "action": {
+                        "type": "DECK_OP",
+                        "params": {
+                            "op": "filter"
+                        },
+                        "function": "lambda g: g.peek_deck(5).keep_matches(g.prompt_color())"
+                    }
+                },
+                "write": {
+                    "text": "COLOR_MATCH: If prev tile owner == next tile owner, Draw 1.",
+                    "action": {
+                        "type": "LOGIC",
+                        "params": {
+                            "cond": "neighbor_match"
+                        },
+                        "function": "lambda g: g.draw(1) if g.prev_tile.owner == g.next_tile.owner else g"
+                    }
+                }
+            }, {
+                "id": "YEL-022",
+                "title": "THREAD_FORK",
+                "seed": 6608,
+                "execute": {
+                    "text": "MULTI_TASK: Take another full turn immediately.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "extra_turn"
+                        },
+                        "function": "lambda g: g.add_extra_turn(1)"
+                    }
+                },
+                "write": {
+                    "text": "PARALLEL: Execute the card ABOVE and BELOW this one simultaneously.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "fork"
+                        },
+                        "function": "lambda g: g.execute_stack_range([g.pc-1, g.pc+1])"
+                    }
+                }
+            }, {
+                "id": "YEL-023",
+                "title": "DEBOUNCE",
+                "seed": 6609,
+                "execute": {
+                    "text": "LIMIT: Target tile cannot be activated > once this round.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "throttle"
+                        },
+                        "function": "lambda g: g.apply_status(g.prompt_tile(), 'throttled')"
+                    }
+                },
+                "write": {
+                    "text": "ONCE_PER_TURN: Ignore this if stack already triggered this turn.",
+                    "action": {
+                        "type": "LOGIC",
+                        "params": {
+                            "cond": "reentry"
+                        },
+                        "function": "lambda g: g if g.has_triggered_stack else g.mark_triggered()"
+                    }
+                }
+            }, {
+                "id": "YEL-024",
+                "title": "NULL_COALESCE",
+                "seed": 6610,
+                "execute": {
+                    "text": "EMPTY_HAND_DRAW: If your hand is empty, draw 3 cards.",
+                    "action": {
+                        "type": "DECK_OP",
+                        "params": {
+                            "op": "draw",
+                            "val": 3
+                        },
+                        "function": "lambda g: g.draw(3) if len(g.hand) == 0 else g"
+                    }
+                },
+                "write": {
+                    "text": "FALLBACK: If the NEXT card generates 0 VP, gain 2 VP instead.",
+                    "action": {
+                        "type": "LOGIC",
+                        "params": {
+                            "cond": "zero_vp"
+                        },
+                        "function": "lambda g: g.add_vp(2) if g.predict_vp(g.pc+1) == 0 else g"
+                    }
+                }
+            }
+        ]
+    }, {
+        "color": "Red",
+        "hexCode": "#FF003C",
+        "delete": {
+            "text": "SHORT CIRCUIT: Subtract -1 Volt from the shared Battery.",
+            "action": {
+                "type": "RESOURCE",
+                "params": {
+                    "type": "battery",
+                    "val": -1
+                },
+                "function": "lambda g: g.add_battery(-1)"
+            }
+        },
+        "cards": [{
+                "id": "RED-001",
+                "title": "MEMORY_LEAK",
+                "seed": 4401,
+                "execute": {
+                    "text": "DOS: Target player must discard 2 cards.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "discard",
+                            "target": "opponent",
+                            "count": 2
+                        },
+                        "function": "lambda g: g.target_opponent().discard(2)"
+                    }
+                },
+                "write": {
+                    "text": "LOGIC BOMB: Next player here moves PC forward 3 spaces.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "pc_shift",
+                            "val": 3
+                        },
+                        "function": "lambda g: g.queue_trap('next_player', lambda game: game.inc_pc(3))"
+                    }
+                }
+            }, {
+                "id": "RED-002",
+                "title": "CORE_DUMP",
+                "seed": 4402,
+                "execute": {
+                    "text": "NUKE: Remove top card from an opponent's Program Stack.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "remove_stack_top"
+                        },
+                        "function": "lambda g: g.target_opponent().discard_stack_top(1)"
+                    }
+                },
+                "write": {
+                    "text": "OVERFLOW: Swap your current card with opponent's current card.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "swap_active"
+                        },
+                        "function": "lambda g: g.swap_active_cards(g.target_opponent())"
+                    }
+                }
+            }, {
+                "id": "RED-003",
+                "title": "VIRUS",
+                "seed": 4403,
+                "execute": {
+                    "text": "INFECT: Place this card into an opponent's Program Stack.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "infect"
+                        },
+                        "function": "lambda g: g.move_card(source='self_hand', target='opponent_stack')"
+                    }
+                },
+                "write": {
+                    "text": "DRAIN: All players lose 1 VP. Battery -1 Volt.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "all",
+                            "vp": -1,
+                            "battery": -1
+                        },
+                        "function": "lambda g: g.all_players_lose_vp(1).add_battery(-1)"
+                    }
+                }
+            }, {
+                "id": "RED-004",
+                "title": "BRUTE_FORCE",
+                "seed": 4404,
+                "execute": {
+                    "text": "CRASH: Force an opponent to Rotate a tile they own.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "force_rotate"
+                        },
+                        "function": "lambda g: g.target_opponent().force_rotate_owned()"
+                    }
+                },
+                "write": {
+                    "text": "WIPE: Remove all Neutral tiles adjacent to this tile.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "remove_neutral"
+                        },
+                        "function": "lambda g: g.remove_adjacent_tiles('neutral')"
+                    }
+                }
+            }, {
+                "id": "RED-005",
+                "title": "BACKDOOR",
+                "seed": 4405,
+                "execute": {
+                    "text": "STEAL: Take 1 random card from an opponent's hand.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "steal"
+                        },
+                        "function": "lambda g: g.steal_random_card('opponent')"
+                    }
+                },
+                "write": {
+                    "text": "HIJACK: Use the Execute effect of the tile the Robot just left.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "hijack"
+                        },
+                        "function": "lambda g: g.execute_card(g.previous_tile_card, 'execute')"
+                    }
+                }
+            }, {
+                "id": "RED-006",
+                "title": "FIREWALL_BREACH",
+                "seed": 4406,
+                "execute": {
+                    "text": "EXPOSE: All players must play with their hands face-up.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "reveal"
+                        },
+                        "function": "lambda g: g.apply_global_status('revealed_hands', duration='infinite')"
+                    }
+                },
+                "write": {
+                    "text": "SCRAMBLE: Reverse the exits of the next 2 tiles.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "invert_exits",
+                            "count": 2
+                        },
+                        "function": "lambda g: g.invert_exits(range=2)"
+                    }
+                }
+            }, {
+                "id": "RED-007",
+                "title": "ZERO_DAY",
+                "seed": 4407,
+                "execute": {
+                    "text": "SHUTDOWN: Immediately end the current turn.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "end_turn"
+                        },
+                        "function": "lambda g: g.end_turn()"
+                    }
+                },
+                "write": {
+                    "text": "UNDERFLOW: Move Program Counter to position 9.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "set_pc",
+                            "val": 9
+                        },
+                        "function": "lambda g: g.set_pc(9)"
+                    }
+                }
+            }, {
+                "id": "RED-008",
+                "title": "MALWARE_INJECT",
+                "seed": 4408,
+                "execute": {
+                    "text": "WORM: Put this card into an opponent's hand. They cannot discard it.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "infect_hand"
+                        },
+                        "function": "lambda g: g.move_card(source='self_hand', target='opponent_hand').apply_status('un-discardable')"
+                    }
+                },
+                "write": {
+                    "text": "STUCK: This card cannot be removed from this Stack by the owner.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock_in_stack"
+                        },
+                        "function": "lambda g: g.apply_status('self', 'immobile')"
+                    }
+                }
+            }, {
+                "id": "RED-009",
+                "title": "PACKET_LOSS",
+                "seed": 4409,
+                "execute": {
+                    "text": "LAG: Target player skips their next Passive Draw.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "skip_draw"
+                        },
+                        "function": "lambda g: g.target_opponent().add_debuff('skip_next_draw')"
+                    }
+                },
+                "write": {
+                    "text": "DROPPED: Opponent must discard the top card of their Stack.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "discard_stack_top"
+                        },
+                        "function": "lambda g: g.target_opponent().discard_stack_top(1)"
+                    }
+                }
+            }, {
+                "id": "RED-010",
+                "title": "OVERHEAT",
+                "seed": 4410,
+                "execute": {
+                    "text": "THERMAL: Choose 1 Tile. It becomes Neutral. Owner loses ownership.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "neutralize"
+                        },
+                        "function": "lambda g: g.set_owner(g.prompt_tile(), 'neutral')"
+                    }
+                },
+                "write": {
+                    "text": "BURN: Subtract -2 Volts from the Battery after scoring.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "battery",
+                            "val": -2
+                        },
+                        "function": "lambda g: g.queue_event('post_score', lambda game: game.add_battery(-2))"
+                    }
+                }
+            }, {
+                "id": "RED-011",
+                "title": "RANSOMWARE",
+                "seed": 4411,
+                "execute": {
+                    "text": "LOCK: Target player cannot use Yellow cards until their next turn.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock_color",
+                            "val": "Yellow"
+                        },
+                        "function": "lambda g: g.target_opponent().restrict_color('Yellow', duration=1)"
+                    }
+                },
+                "write": {
+                    "text": "PAYWALL: To execute the next card, the owner must discard 1 card.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "tax"
+                        },
+                        "function": "lambda g: g.apply_cost_to_next_card({'discard': 1})"
+                    }
+                }
+            }, {
+                "id": "RED-012",
+                "title": "ROOTKIT",
+                "seed": 4412,
+                "execute": {
+                    "text": "STEALTH: Play this card face-down into an opponent's Stack.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "infect_hidden"
+                        },
+                        "function": "lambda g: g.move_card(source='self_hand', target='opponent_stack', face_down=True)"
+                    }
+                },
+                "write": {
+                    "text": "HIDDEN: When triggered, steal 2 VP from the owner of this tile.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "op": "steal_vp",
+                            "val": 2
+                        },
+                        "function": "lambda g: g.steal_vp(2, from_target='tile_owner')"
+                    }
+                }
+            }, {
+                "id": "RED-013",
+                "title": "DDOS_STORM",
+                "seed": 4413,
+                "execute": {
+                    "text": "FLOOD: Every player must discard down to 3 cards.",
+                    "action": {
+                        "type": "DECK_OP",
+                        "params": {
+                            "op": "hand_limit",
+                            "val": 3
+                        },
+                        "function": "lambda g: g.enforce_hand_limit(3, target='all')"
+                    }
+                },
+                "write": {
+                    "text": "TRAFFIC: Every time the Robot moves, Battery -1 Volt.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "battery",
+                            "val": -1
+                        },
+                        "function": "lambda g: g.add_trigger('on_move', lambda game: game.add_battery(-1))"
+                    }
+                }
+            }, {
+                "id": "RED-014",
+                "title": "LOGIC_RIPPER",
+                "seed": 4414,
+                "execute": {
+                    "text": "SHRED: Discard the top 3 cards of the deck.",
+                    "action": {
+                        "type": "DECK_OP",
+                        "params": {
+                            "op": "discard_deck",
+                            "val": 3
+                        },
+                        "function": "lambda g: g.discard_from_deck(3)"
+                    }
+                },
+                "write": {
+                    "text": "CORRUPT: Change the color of this tile to Red for all logic checks.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "recolor"
+                        },
+                        "function": "lambda g: g.set_tile_color('self', 'Red')"
+                    }
+                }
+            }, {
+                "id": "RED-015",
+                "title": "SYSCALL_INTERRUPT",
+                "seed": 5501,
+                "execute": {
+                    "text": "FREEZE: Target opponent cannot play Execute (Hand) cards this turn.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock_type",
+                            "val": "execute"
+                        },
+                        "function": "lambda g: g.target_opponent().restrict_type('execute', duration=1)"
+                    }
+                },
+                "write": {
+                    "text": "SKIP_TILE: The Robot immediately moves to next tile without further code.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "interrupt"
+                        },
+                        "function": "lambda g: g.stop_robot_processing().move_robot(1)"
+                    }
+                }
+            }, {
+                "id": "RED-016",
+                "title": "MEMORY_OVERFLOW",
+                "seed": 5502,
+                "execute": {
+                    "text": "FLOOD: Opponent draws cards until they have 7 in hand.",
+                    "action": {
+                        "type": "DECK_OP",
+                        "params": {
+                            "op": "fill_hand",
+                            "val": 7
+                        },
+                        "function": "lambda g: g.target_opponent().draw_to_limit(7)"
+                    }
+                },
+                "write": {
+                    "text": "CLOG: If you have > 4 cards in hand, discard 2 random cards.",
+                    "action": {
+                        "type": "LOGIC",
+                        "params": {
+                            "cond": "hand_size",
+                            "val": 4
+                        },
+                        "function": "lambda g: g.discard_random(2) if len(g.hand) > 4 else g"
+                    }
+                }
+            }, {
+                "id": "RED-017",
+                "title": "KERNEL_PANIC",
+                "seed": 5503,
+                "execute": {
+                    "text": "RESET_ALL: All players shuffle hands into deck and draw 3 cards.",
+                    "action": {
+                        "type": "DECK_OP",
+                        "params": {
+                            "op": "recycle_all"
+                        },
+                        "function": "lambda g: g.all_players_recycle_hand(3)"
+                    }
+                },
+                "write": {
+                    "text": "CRASH_END: Reset Program Counter to 0 and immediately end turn.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "crash"
+                        },
+                        "function": "lambda g: g.set_pc(0).end_turn()"
+                    }
+                }
+            }, {
+                "id": "RED-018",
+                "title": "DAEMON_THREAD",
+                "seed": 5504,
+                "execute": {
+                    "text": "SNOOP: Look at top 3 cards of opponent's Stack and reorder them.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "peek_reorder"
+                        },
+                        "function": "lambda g: g.target_opponent().peek_stack(3).reorder()"
+                    }
+                },
+                "write": {
+                    "text": "MIGRATE: After triggering, move to top of next player's Stack.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "migrate"
+                        },
+                        "function": "lambda g: g.queue_event('post_activation', lambda game: game.move_card(source='self', target='next_player_stack'))"
+                    }
+                }
+            }, {
+                "id": "RED-019",
+                "title": "PING_FLOOD",
+                "seed": 5505,
+                "execute": {
+                    "text": "JAM: Target opponent reveals hand and discards all Blue cards.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "discard_color",
+                            "val": "Blue"
+                        },
+                        "function": "lambda g: g.target_opponent().reveal_hand().discard_by_color('Blue')"
+                    }
+                },
+                "write": {
+                    "text": "LATENCY: Lose 1 VP for every Blue card currently in your Stack.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp_loss"
+                        },
+                        "function": "lambda g: g.add_vp(-1 * g.count_stack_color('Blue'))"
+                    }
+                }
+            }, {
+                "id": "RED-020",
+                "title": "ZERO_FILL",
+                "seed": 5506,
+                "execute": {
+                    "text": "WIPE_OWNER: Choose an owned tile. It becomes a Neutral tile.",
+                    "action": {
+                        "type": "TRANSFORM",
+                        "params": {
+                            "op": "neutralize"
+                        },
+                        "function": "lambda g: g.set_owner(g.prompt_tile(filter='owned'), 'neutral')"
+                    }
+                },
+                "write": {
+                    "text": "NULL_VALUE: All Green cards in this stack generate 0 VP this turn.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "nullify_color",
+                            "val": "Green"
+                        },
+                        "function": "lambda g: g.apply_stack_modifier(color='Green', effect='null_vp')"
+                    }
+                }
+            }, {
+                "id": "RED-021",
+                "title": "BYPASS_SECURITY",
+                "seed": 5507,
+                "execute": {
+                    "text": "IGNORE: Cancel a Yellow Reaction card played against you.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "counter"
+                        },
+                        "function": "lambda g: g.negate_action('Yellow_reaction')"
+                    }
+                },
+                "write": {
+                    "text": "GHOST_MODE: The Robot does not trigger Stack of the next tile.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "skip_next"
+                        },
+                        "function": "lambda g: g.add_buff('robot', 'ignore_next_stack')"
+                    }
+                }
+            }, {
+                "id": "RED-022",
+                "title": "TROJAN_HORSE",
+                "seed": 5508,
+                "execute": {
+                    "text": "GIFT: Put card in opponent hand. If played, they lose 2 VP.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "booby_trap"
+                        },
+                        "function": "lambda g: g.move_card(source='self_hand', target='opponent_hand').apply_trap('on_play', -2)"
+                    }
+                },
+                "write": {
+                    "text": "DEPLOY: When triggered, move this card into opponent's Stack.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "redeploy"
+                        },
+                        "function": "lambda g: g.move_card(source='self_stack', target='opponent_stack')"
+                    }
+                }
+            }, {
+                "id": "RED-023",
+                "title": "SQL_INJECT",
+                "seed": 5509,
+                "execute": {
+                    "text": "QUERY: Name Color. Opponent reveals hand and discards that color.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "named_discard"
+                        },
+                        "function": "lambda g: g.target_opponent().reveal_hand().discard_by_color(g.prompt_color())"
+                    }
+                },
+                "write": {
+                    "text": "REWRITE_IF: Change condition of next Yellow card to 'IF BATTERY < 3'.",
+                    "action": {
+                        "type": "FLOW",
+                        "params": {
+                            "op": "modify_condition"
+                        },
+                        "function": "lambda g: g.modify_next_card_params({'threshold': 3, 'comparator': '<'})"
+                    }
+                }
+            }, {
+                "id": "RED-024",
+                "title": "HARDWARE_FAIL",
+                "seed": 5510,
+                "execute": {
+                    "text": "BRICK: Tile cannot be rotated or shifted for the rest of the game.",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "permanent_lock"
+                        },
+                        "function": "lambda g: g.apply_status(g.prompt_tile(), 'bricked')"
+                    }
+                },
+                "write": {
+                    "text": "TOLL: To move off this tile, the owner must discard 1 Blue card.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "op": "move_cost"
+                        },
+                        "function": "lambda g: g.add_trigger('on_exit', lambda game: game.cost({'discard_color': 'Blue', 'count': 1}))"
+                    }
+                }
+            }
+        ]
+    }, {
+        "color": "Green",
+        "hexCode": "#00FF41",
+        "delete": {
+            "text": "POWER SURGE: Add +1 Volt to the shared Battery.",
+            "action": {
+                "type": "RESOURCE",
+                "params": {
+                    "type": "battery",
+                    "val": 1
+                },
+                "function": "lambda g: g.add_battery(1)"
+            }
+        },
+        "cards": [{
+                "id": "GRN-001",
+                "title": "ADJACENCY_LINK",
+                "seed": 2201,
+                "execute": {
+                    "text": "LOCKED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "NETWORK LINK: Gain 1 VP + 1 VP per adjacent owned tile.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp",
+                            "base": 1
+                        },
+                        "function": "lambda g: g.add_vp(1 + g.count_neighbors(owner='self'))"
+                    }
+                }
+            }, {
+                "id": "GRN-002",
+                "title": "RUNTIME_FARM",
+                "seed": 2202,
+                "execute": {
+                    "text": "LOCKED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "FLAT_FILE: Gain 2 VP if this tile is at the edge of the map.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp",
+                            "val": 2
+                        },
+                        "function": "lambda g: g.add_vp(2) if g.current_tile.is_edge else g"
+                    }
+                }
+            }, {
+                "id": "GRN-003",
+                "title": "DATA_MINER",
+                "seed": 2203,
+                "execute": {
+                    "text": "LOCKED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "HARVEST: Gain 1 VP for every Blue card in your hand.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp"
+                        },
+                        "function": "lambda g: g.add_vp(g.hand.count_color('Blue'))"
+                    }
+                }
+            }, {
+                "id": "GRN-004",
+                "title": "CACHE_HIT",
+                "seed": 2204,
+                "execute": {
+                    "text": "LOCKED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "BUFFER: Gain 3 VP if your Program Stack has 5+ cards.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp",
+                            "val": 3
+                        },
+                        "function": "lambda g: g.add_vp(3) if len(g.stack) >= 5 else g"
+                    }
+                }
+            }, {
+                "id": "GRN-005",
+                "title": "CLOCK_SPEED",
+                "seed": 2205,
+                "execute": {
+                    "text": "LOCKED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "OVERCLOCK: Gain 1 VP for every 5 Volts currently in the Battery.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp"
+                        },
+                        "function": "lambda g: g.add_vp(g.battery // 5)"
+                    }
+                }
+            }, {
+                "id": "GRN-006",
+                "title": "BIT_STREAM",
+                "seed": 2206,
+                "execute": {
+                    "text": "LOCKED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "SERIAL: Gain 1 VP. If next tile is also yours, gain 2 VP instead.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp"
+                        },
+                        "function": "lambda g: g.add_vp(2) if g.next_tile.owner == 'self' else g.add_vp(1)"
+                    }
+                }
+            }, {
+                "id": "GRN-007",
+                "title": "CORE_VAL",
+                "seed": 2207,
+                "execute": {
+                    "text": "LOCKED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "STATIC: Gain 2 VP. Subtract -1 Volt from the Battery.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp",
+                            "val": 2
+                        },
+                        "function": "lambda g: g.add_vp(2).add_battery(-1)"
+                    }
+                }
+            }, {
+                "id": "GRN-008",
+                "title": "ARCHIVE",
+                "seed": 2208,
+                "execute": {
+                    "text": "LOCKED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "COLLECT: Gain 1 VP for every 2 tiles currently on the board.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp"
+                        },
+                        "function": "lambda g: g.add_vp(len(g.board_tiles) // 2)"
+                    }
+                }
+            }, {
+                "id": "GRN-009",
+                "title": "UPTIME_BONUS",
+                "seed": 2209,
+                "execute": {
+                    "text": "LOCKED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "STABILITY: Gain 1 VP for every turn the Robot has not Off-Tracked.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp"
+                        },
+                        "function": "lambda g: g.add_vp(g.safe_turn_count)"
+                    }
+                }
+            }, {
+                "id": "GRN-010",
+                "title": "BIT_CRUSHER",
+                "seed": 2210,
+                "execute": {
+                    "text": "LOCKED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "RECYCLE: Gain 1 VP for every 3 cards in the Discard pile.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp"
+                        },
+                        "function": "lambda g: g.add_vp(len(g.discard) // 3)"
+                    }
+                }
+            }, {
+                "id": "GRN-011",
+                "title": "CLOUD_COMPUTE",
+                "seed": 2211,
+                "execute": {
+                    "text": "LOCKED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "NETWORK: Gain 1 VP for every Neutral Tile on the board.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp"
+                        },
+                        "function": "lambda g: g.add_vp(g.count_tiles(owner='neutral'))"
+                    }
+                }
+            }, {
+                "id": "GRN-012",
+                "title": "ENCRYPT_REWARD",
+                "seed": 2212,
+                "execute": {
+                    "text": "LOCKED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "SECURE: Gain 3 VP if no Red cards are currently in your Stack.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp",
+                            "val": 3
+                        },
+                        "function": "lambda g: g.add_vp(3) if not g.stack.has_color('Red') else g"
+                    }
+                }
+            }, {
+                "id": "GRN-013",
+                "title": "DATA_DUMP",
+                "seed": 2213,
+                "execute": {
+                    "text": "LOCKED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "LEAK: Gain 1 VP. All opponents must discard 1 card.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp",
+                            "val": 1
+                        },
+                        "function": "lambda g: g.add_vp(1).all_opponents_discard(1)"
+                    }
+                }
+            }, {
+                "id": "GRN-014",
+                "title": "MINING_RIG",
+                "seed": 2214,
+                "execute": {
+                    "text": "LOCKED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "EXTRACT: Gain 1 VP for every 2 Yellow cards in your Stack.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp"
+                        },
+                        "function": "lambda g: g.add_vp(g.stack.count_color('Yellow') // 2)"
+                    }
+                }
+            }, {
+                "id": "GRN-015",
+                "title": "LEGACY_CODE",
+                "seed": 2215,
+                "execute": {
+                    "text": "LOCKED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "ANCIENT: Gain 4 VP if this card is at the bottom of your Stack.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp",
+                            "val": 4
+                        },
+                        "function": "lambda g: g.add_vp(4) if g.pc == len(g.stack) - 1 else g"
+                    }
+                }
+            }, {
+                "id": "GRN-016",
+                "title": "HIGH_SPEED_BUS",
+                "seed": 2216,
+                "execute": {
+                    "text": "LOCKED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "THROUGHPUT: Gain 1 VP for every tile the Robot moves this turn.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp"
+                        },
+                        "function": "lambda g: g.add_vp(g.current_move_distance)"
+                    }
+                }
+            }, {
+                "id": "GRN-017",
+                "title": "GARBAGE_COLLECT",
+                "seed": 8801,
+                "execute": {
+                    "text": "LOCKED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "CLEANUP: Gain 1 VP for every empty card slot in your maximum hand size.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp"
+                        },
+                        "function": "lambda g: g.add_vp(g.max_hand_size - len(g.hand))"
+                    }
+                }
+            }, {
+                "id": "GRN-018",
+                "title": "COMPRESSION",
+                "seed": 8802,
+                "execute": {
+                    "text": "LOCKED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "ZIP_FILE: Gain 5 VP. You must immediately discard your entire hand.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp",
+                            "val": 5
+                        },
+                        "function": "lambda g: g.add_vp(5).discard_hand('all')"
+                    }
+                }
+            }, {
+                "id": "GRN-019",
+                "title": "PEER_TO_PEER",
+                "seed": 8803,
+                "execute": {
+                    "text": "LOCKED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "SHARED_LINK: Gain 2 VP if an opponent owns a tile adjacent to this one.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp",
+                            "val": 2
+                        },
+                        "function": "lambda g: g.add_vp(2) if g.count_neighbors(owner='opponent') > 0 else g"
+                    }
+                }
+            }, {
+                "id": "GRN-020",
+                "title": "BLOCKCHAIN",
+                "seed": 8804,
+                "execute": {
+                    "text": "LOCKED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "LEDGER: Gain 1 VP. The next player to score VP must give you 1 of theirs.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp",
+                            "val": 1
+                        },
+                        "function": "lambda g: g.add_vp(1).apply_vp_tax(count=1)"
+                    }
+                }
+            }, {
+                "id": "GRN-021",
+                "title": "IDLE_PROCESS",
+                "seed": 8805,
+                "execute": {
+                    "text": "LOCKED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "FULL_CHARGE: If the Battery is at Maximum Capacity, gain 3 VP.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp",
+                            "val": 3
+                        },
+                        "function": "lambda g: g.add_vp(3) if g.battery == g.max_battery else g"
+                    }
+                }
+            }, {
+                "id": "GRN-022",
+                "title": "UPTIME_LOG",
+                "seed": 8806,
+                "execute": {
+                    "text": "LOCKED: ACCESS_DENIED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "AVAILABILITY: Gain 1 VP for every tile in the longest continuous path.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp"
+                        },
+                        "function": "lambda g: g.add_vp(g.calculate_max_path_length())"
+                    }
+                }
+            }, {
+                "id": "GRN-023",
+                "title": "REDUNDANCY_CHECK",
+                "seed": 8807,
+                "execute": {
+                    "text": "LOCKED: ACCESS_DENIED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "RAID_ARRAY: Gain 3 VP if you have a card with the same Title in your Hand.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp",
+                            "val": 3
+                        },
+                        "function": "lambda g: g.add_vp(3) if g.hand.has_duplicate(g.current_card.title) else g"
+                    }
+                }
+            }, {
+                "id": "GRN-024",
+                "title": "HASH_RATE",
+                "seed": 8808,
+                "execute": {
+                    "text": "LOCKED: ACCESS_DENIED",
+                    "action": {
+                        "type": "SECURITY",
+                        "params": {
+                            "op": "lock"
+                        },
+                        "function": "lambda g: g"
+                    }
+                },
+                "write": {
+                    "text": "COMPUTE_POWER: Gain 1 VP for every 4 cards in the shared Discard pile.",
+                    "action": {
+                        "type": "RESOURCE",
+                        "params": {
+                            "type": "vp"
+                        },
+                        "function": "lambda g: g.add_vp(len(g.discard) // 4)"
+                    }
+                }
+            }
+        ]
+    }
+]
