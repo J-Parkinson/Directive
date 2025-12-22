@@ -1,6 +1,7 @@
 from typing import List
 from board import GameBoard
-from card import GameCard, MainDeck, DiscardDeck
+from card import GameCard
+from cardDecks import CardDecks
 from player import Player
 from robot import Robot
 
@@ -10,8 +11,7 @@ class DirectiveGame:
         self.board = GameBoard(5, 5)
         self.robot = Robot((2, 2))
         self.players = [Player(f"Player {str(i)}") for i in range(noPlayers)]
-        self.main_deck = MainDeck(cards)
-        self.discard_deck = DiscardDeck()
+        self.card_decks = CardDecks(cards)
         self.current_player_idx = 0
         self.battery_max = 20
 
