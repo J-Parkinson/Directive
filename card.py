@@ -1,3 +1,4 @@
+from game import DirectiveGame
 from hydrate import HydratedCard
 from dataclasses import dataclass
 from pile import Pile
@@ -24,7 +25,7 @@ class GameCard:
         print(f"║ WRITE: {self.data.write['text'][:23]}... ║")
         print(f"╚{border}╝")
 
-    def _run_logic(self, logic_str: str, game: 'DirectiveGame'):
+    def _run_logic(self, logic_str: str, game: DirectiveGame):
         """Safely evaluates the lambda logic against the game state."""
         try:
             # We pass the game object as 'g' to match our lambda definitions
@@ -34,13 +35,13 @@ class GameCard:
             print(f"CRITICAL ERROR in {self.id} logic: {e}")
             return game
 
-    def execute(self, game: 'DirectiveGame'):
+    def execute(self, game: DirectiveGame):
         return self._run_logic(self.execute_logic, game)
 
-    def write(self, game: 'DirectiveGame'):
+    def write(self, game: DirectiveGame):
         return self._run_logic(self.write_logic, game)
 
-    def delete(self, game: 'DirectiveGame'):
+    def delete(self, game: DirectiveGame):
         return self._run_logic(self.delete_logic, game)
 
 MainDeck = Pile[GameCard]
